@@ -33,7 +33,7 @@
                 catch (FormatException ex)
                 {
                     Console.WriteLine($"\nErro: {ex.Message}"); // Exibe "Não é possível dividir por zero."
-                    Console.WriteLine("Pressione qualquer tecla para tentar outro número.");
+                    Console.WriteLine("Press any key to try another number.");
                     Console.ReadKey();
                     continue;
                 }
@@ -60,7 +60,7 @@
                         {
                             // Se o erro de divisão por zero ocorrer, caimos aqui
                             Console.WriteLine($"\nErro: {ex.Message}"); // Exibe "Não é possível dividir por zero."
-                            Console.WriteLine("Pressione qualquer tecla para tentar outro número.");
+                            Console.WriteLine("Press any key to try another number.");
                             Console.ReadKey();
                             continue; // Volta para o início do while para pedir novos números
                         }
