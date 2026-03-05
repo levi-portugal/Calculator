@@ -13,7 +13,6 @@ namespace TestCalculator.Entities
             Console.Clear();
             Console.WriteLine("###- Calculation History -###\n");
 
-
             //aqui ele verifica se a lista não está vazia
             if (operations.Count == 0)
             {
@@ -30,7 +29,7 @@ namespace TestCalculator.Entities
 
             Console.WriteLine("\nPress any key to return to the menu.");
             Console.ReadKey();
-            // Removi a chamada do menu que estava aqui pq acava criando um outro fluxo alternativo sem querer
+            // Removi a chamada do menu que estava aqui pq acabava criando um outro fluxo alternativo sem querer
         }
     }
 }

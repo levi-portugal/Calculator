@@ -19,7 +19,7 @@ namespace TestCalculator.Entities
                 Console.WriteLine("1 - New calc\n2 - View Historic\n0 - Exit\n");
 
                 int resposta = int.Parse(Console.ReadLine());
-
+                //oi
                 switch (resposta)
                 {
                     case 1:

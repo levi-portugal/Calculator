@@ -3,6 +3,7 @@
     public class Operation
     {
         // 'static' faz com que todas as classes acessem a MESMA lista na memória
+        //não estava conseguindo ver o histórico pq alista não era static
         public static List<string> operations = new List<string>();
 
         public double Sum(double n1, double n2) => n1 + n2;
@@ -10,7 +11,6 @@
         public double Multiplication(double n1, double n2) => n1 * n2;
         public double Division(double n1, double n2) => n2 != 0 ? n1 / n2 : throw new DivideByZeroException(); //Tive bastante dificuldade pra fazer a verificação,
                                                                                                                //provavelmente preciso estudar mais sobre isso até fixar
-
         public void Newcalc()
         {
             //condição pra manter o while como verdadeiro ate o usuario querer parar
@@ -21,10 +21,22 @@
                 Console.Clear();
                 Console.WriteLine("###- New calc -###");
 
-                Console.Write("Enter the first number: ");
-                double num1 = double.Parse(Console.ReadLine());
-                Console.Write("Enter the second number: ");
-                double num2 = double.Parse(Console.ReadLine());
+                double num1;
+                double num2;
+                try
+                {
+                    Console.Write("Enter the first number: ");
+                    num1 = double.Parse(Console.ReadLine());
+                    Console.Write("Enter the second number: ");
+                    num2 = double.Parse(Console.ReadLine());
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"\nErro: {ex.Message}"); // Exibe "Não é possível dividir por zero."
+                    Console.WriteLine("Pressione qualquer tecla para tentar outro número.");
+                    Console.ReadKey();
+                    continue;
+                }
 
                 Console.WriteLine("\n1-Sum | 2-Subtration | 3-Multiplication | 4-Division");
                 int choice = int.Parse(Console.ReadLine());
@@ -43,7 +55,6 @@
                         {
                             result = Division(num1, num2); // Tenta calcular
                             opSymbol = "/";
-
                         }
                         catch (DivideByZeroException ex)
                         {
@@ -57,7 +68,6 @@
                     // result = Division(num1, num2); opSymbol = "/"; break;
                     default: Console.WriteLine("Invalid!"); continue;
                 }
-
                 // EXIBE E SALVA NO HISTÓRICO
                 string calculationEntry = $"{num1} {opSymbol} {num2} = {result}";
                 Console.WriteLine($"\nYour result: {calculationEntry}");
@@ -66,13 +76,11 @@
                 Console.Write("\nDo you want to perform a new calculation? (y/n): ");
                 string resp = Console.ReadLine().ToLower(); // esse Tolower pega a resposta e converte pra minusculo,
                                                             // o que evita de usar um if
-
                 if (resp != "y")
                 {
                     keepCalculating = false; // Sai do loop e volta naturalmente para quem chamou (Menu),
                                              // tive dificuldade com a questão de fluxo correto de voltar para o menu,
                                              // que não me deixava salvar no histórico
-
                 }
             }
         }
