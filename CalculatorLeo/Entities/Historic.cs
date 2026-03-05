@@ -1,36 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using CalculatorLeo.Entities;
 
-namespace CalculatorLeo.Entities
+
+namespace TestCalculator.Entities
 {
-    internal class Historic
+    public class Historic : Operation
     {
-        public int Num1 { get; set; }
-        public int Num2 { get; set; }
-        public int OperationCode { get; set; }
-        public Operation OperationUsed { get; set; }
-        public int Result { get; set; }
-        public Historic(int num1, int num2, Operation operationUsed, int operationCode, int result)
+        public void HistoricShow()
         {
-            Num1 = num1;
-            Num2 = num2;
-            OperationUsed = operationUsed;
-            OperationCode = operationCode;
-            Result = result;
-        }
+            Console.Clear();
+            Console.WriteLine("###-calculation history--###\n");
 
-        public void HistoricView()
-        {
-            Console.WriteLine("Histórico: ");
-            Console.WriteLine($"Operação numero {OperationCode}: \n");
-            Console.WriteLine($"Numeros escolhidos: {Num1} e {Num2}");
-            Console.WriteLine($"Operação escolhida: {OperationUsed}");
-            Console.WriteLine($"Resultado: {Result}");
-            Console.WriteLine("###################################");
-        }
+            foreach (var item in operations)
+            {
+                Console.WriteLine(item.Num1 + item.Num2);
+            }
 
-        
+            Console.Write("Press any key to return to the menu.");
+            Console.ReadKey();
+
+            Menu mn = new Menu();
+            mn.ShowMenu();
+        }
     }
 }
