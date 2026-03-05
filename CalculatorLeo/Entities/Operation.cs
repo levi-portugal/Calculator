@@ -1,108 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Threading.Channels;
-using TestCalculator.Entities;
-
-namespace CalculatorLeo.Entities
+﻿namespace CalculatorLeo.Entities
 {
     public class Operation
     {
-        public List<Operation> operations = new List<Operation>();
+        // 'static' faz com que todas as classes acessem a MESMA lista na memória
+        public static List<string> operations = new List<string>();
 
-        public double Num1 { get; set; }
-        public double Num2 { get; set; }
-
-        public double Sum(double num1, double num2)
-        {
-            double sum = num1 + num2;
-            return sum;
-        }
-
-        public double Subtration(double num1, double num2)
-        {
-            double sum = num1 - num2;
-            return sum;
-        }
-
-        public double Multiplication(double num1, double num2)
-        {
-            double mult = num1 * num2;
-            return mult;
-        }
-
-        public double Division(double num1, double num2)
-        {
-            if (num2 == 0)
-            {
-                throw new DivideByZeroException("You cannot divide by zero.");
-            }
-            double div = num1 / num2;
-            return div;
-        }
+        public double Sum(double n1, double n2) => n1 + n2;
+        public double Subtration(double n1, double n2) => n1 - n2;
+        public double Multiplication(double n1, double n2) => n1 * n2;
+        public double Division(double n1, double n2) => n2 != 0 ? n1 / n2 : throw new DivideByZeroException(); //Tive bastante dificuldade pra fazer a verificação,
+                                                                                                               //provavelmente preciso estudar mais sobre isso até fixar
 
         public void Newcalc()
         {
-            Console.Clear();
-            Console.WriteLine("###-New calc-###");
-            //Console.Write("\nHow many calculations do you want to perform? ");
-            //int num = int.Parse(Console.ReadLine());
-            double num1;
-            double num2;
-            // for (int i = 1; i <= num; i++)
-            //{
-            while (true)
-            {
-                Console.Write($"\nEnter the first number digit of the account. ");
-                num1 = double.Parse(Console.ReadLine());
-                Console.Write($"Enter the second number digit of the account. \n");
-                num2 = double.Parse(Console.ReadLine());
+            //condição pra manter o while como verdadeiro ate o usuario querer parar
+            bool keepCalculating = true;
 
-                Console.WriteLine($"What operation do you want to perform with the numbers? {num1} e {num2}?\n");
-                Console.WriteLine("Sum - enter 1 \nSubtration - enter 2 \nMultiplication - enter 3 \nDivision - enter 4");
+            while (keepCalculating)
+            {
+                Console.Clear();
+                Console.WriteLine("###- New calc -###");
+
+                Console.Write("Enter the first number: ");
+                double num1 = double.Parse(Console.ReadLine());
+                Console.Write("Enter the second number: ");
+                double num2 = double.Parse(Console.ReadLine());
+
+                Console.WriteLine("\n1-Sum | 2-Subtration | 3-Multiplication | 4-Division");
                 int choice = int.Parse(Console.ReadLine());
 
-                Operation calc = new Operation();
+                double result = 0;
+                string opSymbol = "";
 
                 switch (choice)
                 {
-                    case 1:
-                        double result = calc.Sum(num1, num2);
-                        Console.WriteLine($"Your result is {result}");
-                        break;
-                    case 2:
-                        double result2 = calc.Subtration(num1, num2);
-                        Console.WriteLine($"Your result is {result2}");
-                        break;
-                    case 3:
-                        double result3 = calc.Multiplication(num1, num2);
-                        Console.WriteLine($"Your result is {result3}");
-                        break;
+                    //troquei as funções normais pra arrow functions
+                    case 1: result = Sum(num1, num2); opSymbol = "+"; break;
+                    case 2: result = Subtration(num1, num2); opSymbol = "-"; break;
+                    case 3: result = Multiplication(num1, num2); opSymbol = "*"; break;
                     case 4:
-                        double result4 = calc.Division(num1, num2);
-                        Console.WriteLine($"Your result is {result4}", CultureInfo.InvariantCulture);
-                        break;
-                    default:
-                        Console.WriteLine("Invalid option!");
-                        break;
+                        try
+                        {
+                            result = Division(num1, num2); // Tenta calcular
+                            opSymbol = "/";
 
+                        }
+                        catch (DivideByZeroException ex)
+                        {
+                            // Se o erro de divisão por zero ocorrer, caimos aqui
+                            Console.WriteLine($"\nErro: {ex.Message}"); // Exibe "Não é possível dividir por zero."
+                            Console.WriteLine("Pressione qualquer tecla para tentar outro número.");
+                            Console.ReadKey();
+                            continue; // Volta para o início do while para pedir novos números
+                        }
+                        break;
+                    // result = Division(num1, num2); opSymbol = "/"; break;
+                    default: Console.WriteLine("Invalid!"); continue;
                 }
 
-                Console.Write("\nDo you want to perform a new calculation? (y/n) ");
-                char input = char.Parse(Console.ReadLine());
+                // EXIBE E SALVA NO HISTÓRICO
+                string calculationEntry = $"{num1} {opSymbol} {num2} = {result}";
+                Console.WriteLine($"\nYour result: {calculationEntry}");
+                operations.Add(calculationEntry);
 
-                if (input == 'y' || input == 'Y')
+                Console.Write("\nDo you want to perform a new calculation? (y/n): ");
+                string resp = Console.ReadLine().ToLower(); // esse Tolower pega a resposta e converte pra minusculo,
+                                                            // o que evita de usar um if
+
+                if (resp != "y")
                 {
-                    continue;
-                }
-                else
-                {
-                    Menu menu = new Menu();
-                    menu.ShowMenu();
+                    keepCalculating = false; // Sai do loop e volta naturalmente para quem chamou (Menu),
+                                             // tive dificuldade com a questão de fluxo correto de voltar para o menu,
+                                             // que não me deixava salvar no histórico
+
                 }
             }
         }
-
     }
 }

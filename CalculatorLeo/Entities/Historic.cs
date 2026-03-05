@@ -11,18 +11,26 @@ namespace TestCalculator.Entities
         public void HistoricShow()
         {
             Console.Clear();
-            Console.WriteLine("###-calculation history--###\n");
+            Console.WriteLine("###- Calculation History -###\n");
 
-            foreach (var item in operations)
+
+            //aqui ele verifica se a lista não está vazia
+            if (operations.Count == 0)
             {
-                Console.WriteLine(item.Num1 + item.Num2);
+                Console.WriteLine("No records found.");
+            }
+            else
+            {
+                //se não tiver ele exiber todos os elementos da lista no formato de string
+                foreach (string item in operations)
+                {
+                    Console.WriteLine(item);
+                }
             }
 
-            Console.Write("Press any key to return to the menu.");
+            Console.WriteLine("\nPress any key to return to the menu.");
             Console.ReadKey();
-
-            Menu mn = new Menu();
-            mn.ShowMenu();
+            // Removi a chamada do menu que estava aqui pq acava criando um outro fluxo alternativo sem querer
         }
     }
 }
