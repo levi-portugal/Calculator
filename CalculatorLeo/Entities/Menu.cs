@@ -24,9 +24,7 @@ namespace TestCalculator.Entities
                 }
                 catch (FormatException ex)
                 {
-                    Console.WriteLine($"\nErro: {ex.Message}"); 
-                    Console.WriteLine("Press any key to try another option.");
-                    Console.ReadKey();
+      
                     continue;
                 }                                    
 
